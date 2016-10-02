@@ -3,10 +3,11 @@ This is a pricing engine that prints out the estimated policy price for a given 
 User Stories |
 ------------ |
 As a user, I want to navigate to the home page that has a link to the estimate page.
-As a developer, I want to create the required models
-As a developer, I want to seed the database automatically with data.
+As a developer, I want to create the required models.
+As a user, I want to navigate to the estimate page from the home page.
+As a user I want to submit my information on the estimate page and move to a summary page.
 As a developer, I want to create a helper to calculate the policy price based on rules.
-As a user I want to enter my information on the estimate page and generate an estimate of how much the policy will cost.
+As a user, I want to receive the estimated policy price based on the information I submitted.
 As a user, I should be able to generate estimates multiple times for different sets of information.
 
 
