@@ -1,0 +1,32 @@
+<h1>New Estimate</h1>
+
+<div class="row">
+   <div class="col-md-4">
+     <%= form_for @estimate do |f| %>
+       <%= fields_for @person do |p| %>
+         <div class="form-group">
+           <%= p.label :name %>
+           <%= p.text_field :first_name, class: 'form-control', placeholder: "Enter first name" %>
+         </end>
+         <div class="form-group">
+           <%= p.label :age %>
+           <%= p.text_field :age, class: 'form-control', placeholder: "Enter age" %>
+         </end>
+         <div class="form-group">
+           <%= p.label :gender %>
+           <%= p.select(:gender, Person::GENDER_TYPES, {}, {:class => 'form-control'}) %>
+         </end>
+         <div class="form-group">
+           <%= p.label :cities %>
+           <%= p.select :id, Location.all.collect { |p| [ p.city, p.id ] }, {}, class: "form-control" %>
+         </end>
+       <% end %>
+       <div class="row">
+        </br>
+       </div>
+       <div class="form-group">
+         <%= f.submit "Submit", class: 'btn btn-success' %>
+       <end>
+     <% end %>
+   </div>
+ </div>
