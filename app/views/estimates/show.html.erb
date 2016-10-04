@@ -1,2 +1,7 @@
-<h1>Estimates#show</h1>
-<p>Find me in app/views/estimates/show.html.erb</p>
+<h2>Estimated policy price for <%= @estimate.person.first_name %></h2>
+<div>
+  <p>$ <%= @estimate.amount %></p>
+</div>
+<div>
+  <p>Rules: <%= @estimate.rules_applied %></p>
+</div>
