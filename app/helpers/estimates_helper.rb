@@ -16,8 +16,10 @@ module EstimatesHelper
       final_amount = 0
       rules_applied_desc = "Life insurance is only available for people over the age of #{Estimate::MINIMUM_AGE}."
     else
-      final_amount += ((person.age - Estimate::MINIMUM_AGE)/Estimate::AGE_INCREMENT).floor * Estimate::AGE_PRICE_INCREMENT
-      rules_applied_desc += " For every #{Estimate::AGE_INCREMENT} years over the age of #{Estimate::MINIMUM_AGE} years old, the base price increases by #{Estimate::AGE_PRICE_INCREMENT}."
+      if ((person.age - Estimate::MINIMUM_AGE) >= Estimate::AGE_INCREMENT)
+        final_amount += ((person.age - Estimate::MINIMUM_AGE)/Estimate::AGE_INCREMENT).floor * Estimate::AGE_PRICE_INCREMENT
+        rules_applied_desc += " For every #{Estimate::AGE_INCREMENT} years over the age of #{Estimate::MINIMUM_AGE} years old, the base price increases by #{Estimate::AGE_PRICE_INCREMENT}."
+      end
       if east_coast?(person.location)
         final_amount = final_amount*(1-(Estimate::GEOGRAPHIC_DISCOUNT_PERCENT.to_f/100))
         rules_applied_desc += " If on the East Coast of America, the cost is #{Estimate::GEOGRAPHIC_DISCOUNT_PERCENT}% lower."
