@@ -18,7 +18,7 @@
          </end>
          <div class="form-group">
            <%= p.label :cities %>
-           <%= p.select :id, Location.all.collect { |p| [ p.city, p.id ] }, {}, class: "form-control" %>
+           <%= p.select :location, Location.all.collect { |p| [ p.city, p.id ] }, {}, class: "form-control" %>
          </end>
        <% end %>
        <div class="row">
