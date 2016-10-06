@@ -1,7 +1,30 @@
 <h2>Estimated policy price for <%= @estimate.person.first_name %></h2>
 <div>
-  <p>$ <%= @estimate.amount %></p>
+  <p>Age: <%= @estimate.person.age %></p>
 </div>
 <div>
-  <p>Rules: <%= @estimate.rules_applied %></p>
+  <p>Gender: <%= @estimate.person.gender %></p>
+</div>
+<div>
+  <p>City: <%= Location.find(@estimate.person.location).city %></p>
+</div>
+<div>
+  <% if @estimate.person.person_healths %>
+    Health Conditions:
+    <% @estimate.person.person_healths.each do |ph| %>
+      <%= ph.condition %>,
+    <% end %>
+  <% end %>
+</div>
+<hr>
+<div>
+  <% if @estimate.amount>0 %>
+    <p>Estimated amount: $ <%= @estimate.amount %></p>
+  <% end %>
+</div>
+<div>
+  <p>Pricing rules applied: <%= @estimate.rules_applied %></p>
+</div>
+<div>
+  <%= link_to "Get Another Estimate", new_estimate_path, class: 'btn btn-primary' %>
 </div>

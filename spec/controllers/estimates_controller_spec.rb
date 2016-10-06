@@ -39,18 +39,18 @@ RSpec.describe EstimatesController, type: :controller do
     my_location1 = Location.create!(city: 'Boston',state: 'MA',coast: 0)
     my_location2 = Location.create!(city: 'Seattle',state: 'WA',coast: 1)
 
-    it "applies pricing rules for female on east coast with age increment" do
-      post :create, {person: {first_name: "Kelly", age: 50, gender: "female", location: my_location1}}
-      expect(assigns(:estimate)).to have_attributes(amount: 197.00, rules_applied: "The base cost of insurance is $100 annually. For every 5 years over the age of 18 years old, the base price increases by 20.0. If on the East Coast of America, the cost is 5% lower. Females have a longer life expectancy, so receive a $12.0 discount on the final price.")
+    it "applies pricing rules for female on east coast with age increment and health condition" do
+      post :create, {person: {first_name: "Kelly", age: 50, gender: "female", location: my_location1}, person_health: {condition: ["allergies"]}}
+      expect(assigns(:estimate)).to have_attributes(amount: 199.09, rules_applied: "The base cost of insurance is $100 annually. For every 5 years over the age of 18 years old, the base price increases by 20.0. If on the East Coast of America, the cost is 5% lower. 1% applied for allergies. Females have a longer life expectancy, so receive a $12.0 discount on the final price.")
     end
 
     it "applies pricing rules for male on west coast with no age increment" do
-      post :create, {person: {first_name: "Brad", age: 20, gender: "male", location: my_location2}}
+      post :create, {person: {first_name: "Brad", age: 20, gender: "male", location: my_location2}, person_health: {}}
       expect(assigns(:estimate)).to have_attributes(amount: 100.00, rules_applied: "The base cost of insurance is $100 annually.")
     end
 
     it "redirects to the new estimate" do
-      post :create, {person: {first_name: "Brad", age: 20, gender: "male", location: my_location2}}
+      post :create, {person: {first_name: "Brad", age: 20, gender: "male", location: my_location2}, person_health: {}}
       expect(response).to redirect_to Estimate.last
     end
   end

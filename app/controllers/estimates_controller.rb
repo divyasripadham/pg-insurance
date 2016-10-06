@@ -12,6 +12,7 @@ class EstimatesController < ApplicationController
   def new
     @estimate = Estimate.new
     @person = Person.new
+    @person_health = PersonHealth.new
   end
 
   def create
@@ -20,12 +21,22 @@ class EstimatesController < ApplicationController
     @person.age = params[:person][:age]
     @person.gender = params[:person][:gender]
     @person.location = params[:person][:location]
+
+    if params[:person_health][:condition]
+      params[:person_health][:condition].each do |condition|
+        if !(condition == "")
+          @person.person_healths.build(:condition => condition)
+        end
+      end
+    end
+
     @person.save
 
     @estimate = Estimate.new
     @estimate.person = @person
-    @estimate.amount = estimate_amount(@person)[:amount]
-    @estimate.rules_applied = estimate_amount(@person)[:rules_applied]
+    estimated_amount = estimate_amount(@person)
+    @estimate.amount = estimated_amount[:amount]
+    @estimate.rules_applied = estimated_amount[:rules_applied]
 
     if @estimate.save
       redirect_to @estimate
