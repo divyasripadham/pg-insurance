@@ -21,7 +21,7 @@ class Person < ActiveRecord::Base
 end
 ```
 
-* PersonHealth model: Holds health condition information for each Person. Each Person can have multiple PersonHealth records.
+* PersonHealth model: Holds health condition information for each Person. Since each Person can have multiple health conditions (one-to-many relationship), each Person record can have multiple PersonHealth records. This is a better design than storing all the health conditions in the Person model.
 
 ```
 class PersonHealth < ActiveRecord::Base
@@ -37,7 +37,7 @@ class Location < ActiveRecord::Base
 end
 ```
 
-* Estimate model: Used to store the estimated policy price and rules applied for each person. Each person has an Estimate. Also has the constants required to apply the rules to calculate the policy price. Any changes in policy rules can be made by updating the constants in this model.
+* Estimate model: Used to store the estimated policy price and rules applied for each Person. Each Person has an Estimate. This model also has the constants required to apply the rules to calculate the policy price. Any changes in policy rules can be made easily by updating the constants in this model.
 
 ```
 class Estimate < ActiveRecord::Base
@@ -59,7 +59,7 @@ end
 
 * WelcomeController controller: Used to show the home page. Uses view welcome>index.html
 
-* EstimatesController controller: Used to collect Person information, create a new estimate for that Person and calculate the estimated policy price. Uses view estimates>new.html and estimates>show.html
+* EstimatesController controller: Used to collect Person information, create a new estimate for that Person and calculate the estimated policy price. Uses views estimates>new.html and estimates>show.html
 
 * EstimatesHelper helper: Used by EstimatesController to calculate estimated policy price.
 
@@ -94,5 +94,6 @@ Test the application |
 2. Run the RSpec tests located under the /spec folder.
 3. Go to http://localhost:3000/ to launch the website.
 4. On the home page, click the Get Estimate button.
-5. In the Estimate page, enter your information and click the Submit button.
+5. In the Estimate page, enter Person information and click the Submit button.
 6. You will see a summary page showing the estimated policy price and the rules that were applied to calculate the policy price.
+7. Click the Get Another Estimate button to calculate policy price for new Person information.
