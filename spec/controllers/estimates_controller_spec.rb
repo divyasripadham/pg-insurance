@@ -1,4 +1,5 @@
 require 'rails_helper'
+include EstimatesHelper
 
 RSpec.describe EstimatesController, type: :controller do
 
@@ -38,19 +39,37 @@ RSpec.describe EstimatesController, type: :controller do
   describe "POST #create" do
     my_location1 = Location.create!(city: 'Boston',state: 'MA',coast: 0)
     my_location2 = Location.create!(city: 'Seattle',state: 'WA',coast: 1)
+    my_location3 = Location.create!(city: 'New York',state: 'NY',coast: 0)
+    my_location4 = Location.create!(city: 'San Francisco',state: 'CA',coast: 1)
+    my_location5 = Location.create!(city: 'Los Angeles',state: 'CA',coast: 1)
 
-    it "applies pricing rules for female on east coast with age increment and health condition" do
+    it "applies pricing rules for female on east coast with age increment and one health condition" do
       post :create, {person: {first_name: "Kelly", age: 50, gender: "female", location: my_location1}, person_health: {condition: ["allergies"]}}
-      expect(assigns(:estimate)).to have_attributes(amount: 199.09, rules_applied: "The base cost of insurance is $100 annually. For every 5 years over the age of 18 years old, the base price increases by 20.0. If on the East Coast of America, the cost is 5% lower. 1% applied for allergies. Females have a longer life expectancy, so receive a $12.0 discount on the final price.")
+      expect(assigns(:estimate)).to have_attributes(amount: 199.09)
     end
 
-    it "applies pricing rules for male on west coast with no age increment" do
-      post :create, {person: {first_name: "Brad", age: 20, gender: "male", location: my_location2}, person_health: {}}
-      expect(assigns(:estimate)).to have_attributes(amount: 100.00, rules_applied: "The base cost of insurance is $100 annually.")
+    it "applies pricing rules for male on west coast with age increment and one health condition" do
+      post :create, {person: {first_name: "Josh", age: 40, gender: "male", location: my_location2}, person_health: {condition: ["sleep apnea"]}}
+      expect(assigns(:estimate)).to have_attributes(amount: 190.8)
+    end
+
+    it "applies pricing rules for female on east coast with age increment and multiple health conditions" do
+      post :create, {person: {first_name: "Jan", age: 30, gender: "female", location: my_location3}, person_health: {condition: ["heart disease", "high cholesterol"]}}
+      expect(assigns(:estimate)).to have_attributes(amount: 154.25)
+    end
+
+    it "applies pricing rules for male on west coast with no age increment or health condition" do
+      post :create, {person: {first_name: "Brad", age: 20, gender: "male", location: my_location4}, person_health: {}}
+      expect(assigns(:estimate)).to have_attributes(amount: 100.00)
+    end
+
+    it "applies pricing rules for male on west coast under 18 with health condition" do
+      post :create, {person: {first_name: "Petr", age: 10, gender: "male", location: my_location5}, person_health: {condition: ["asthma"]}}
+      expect(assigns(:estimate)).to have_attributes(amount: 0.00, rules_applied: "Life insurance is only available for people over the age of 18.")
     end
 
     it "redirects to the new estimate" do
-      post :create, {person: {first_name: "Brad", age: 20, gender: "male", location: my_location2}, person_health: {}}
+      post :create, {person: {first_name: "Kelly", age: 50, gender: "female", location: my_location1}, person_health: {condition: ["allergies"]}}
       expect(response).to redirect_to Estimate.last
     end
   end
