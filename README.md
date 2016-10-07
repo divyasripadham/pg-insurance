@@ -10,7 +10,8 @@ User Stories |
 
 Design Decisions |
 ------------ |
-1. Person: Holds the information of the person for whom the policy price is to be estimated.
+* Person model: Holds the information of the person for whom the policy price is to be estimated.
+
 ```
 class Person < ActiveRecord::Base
   has_many :estimates
@@ -19,32 +20,73 @@ class Person < ActiveRecord::Base
   enum gender: [:female, :male]
 end
 ```
-2. PersonHealth
+
+* PersonHealth model: Holds health condition information for each Person. Each Person can have multiple PersonHealth records.
+
+```
+class PersonHealth < ActiveRecord::Base
+  belongs_to :person
+end
+```
+
+* Location model: Holds the names of all cities in the US. It also indicates whether a city is in the east coast or west coast. This can be extended to include other geographic conditions.
+
+```
+class Location < ActiveRecord::Base
+  enum coast: [:east, :west]
+end
+```
+
+* Estimate model: Used to store the estimated policy price and rules applied for each person. Each person has an Estimate. Also has the constants required to apply the rules to calculate the policy price. Any changes in policy rules can be made by updating the constants in this model.
+
+```
+class Estimate < ActiveRecord::Base
+  belongs_to :person
+  BASE_COST = 100.00
+  MINIMUM_AGE = 18
+  AGE_INCREMENT = 5
+  AGE_PRICE_INCREMENT = 20.00
+  GEOGRAPHIC_DISCOUNT_PERCENT = 5
+  GENDER_DISCOUNT = 12.00
+  HEALTH = {:"allergies" => 1, :"sleep apnea" => 6, :"heart disease" => 17, :"high cholesterol" => 8, :"asthma" => 4 }
+
+  def self.health_keys
+    HEALTH.keys
+  end
+
+end
+```
+
+* WelcomeController controller: Used to show the home page. Uses view welcome>index.html
+
+* EstimatesController controller: Used to collect Person information, create a new estimate for that Person and calculate the estimated policy price. Uses view estimates>new.html and estimates>show.html
+
+* EstimatesHelper helper: Used by EstimatesController to calculate estimated policy price.
 
 Dependencies |
 ------------ |
-1. Ruby version
-*  2.2
-2. Rails version
-*  4.2.4
-3. Gem version
-*  2.6.6
-4. Configuration
-*  Install Rails using this link http://installrails.com/
-5. Testing tool
-*  RSpec
+1. Ruby version:
+2.2
+2. Rails version:
+4.2.4
+3. Gem version:
+2.6.6
+4. Configuration:
+Install Rails using this link http://installrails.com/
+5. Testing tool:
+RSpec
 
 Deployment instructions |
 ------------ |
 1. Unzip the file and navigate to the /policygenius/insurance folder.
-2. Run the following command to install everything in the Gemfile
-* bundle install --without production
-3. Run the following command to create the database
-* rake db:create
-4. Run the following command to create the schema tables
-* rake db:migrate
+2. Run the following command to install everything in the Gemfile.
+bundle install --without production
+3. Run the following command to create the database.
+rake db:create
+4. Run the following command to create the schema tables.
+rake db:migrate
 5. Run the seed file to populate database with cities.
-* rake db:reset
+rake db:reset
 
 Test the application |
 ------------ |
