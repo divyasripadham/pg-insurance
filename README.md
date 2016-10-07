@@ -4,32 +4,27 @@ User Stories |
 ------------ |
 As a user, I want to navigate to the home page that has a link to the estimate page.
 As a developer, I want to create the required models.
-As a user, I want to navigate to the estimate page from the home page.
-As a user I want to submit my information on the estimate page and move to a summary page.
-As a developer, I want to create a helper to calculate the policy price based on rules.
-As a user, I want to receive the estimated policy price based on the information I submitted.
+As a user, from the home page I want to navigate to the estimate page and submit my information.
+As a developer, I want to create a helper to calculate the policy price based on user information.
+As a user, once I submit my information on the estimate page, I want to see the estimated price in a summary page.
 
+Dependencies |
+------------ |
 * Ruby version
 ruby 2.2
 
 * Rails version
 ruby 4.2.4
 
-* System dependencies
+* Gem version
+2.6.6
 
 * Configuration
 Install Rails using this link http://installrails.com/
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-1. Unzip
+Deployment instructions |
+------------ |
+1. Unzip the file
 2. Run the following command to install everything in the Gemfile
 bundle install --without production
 3. Run the following command to create the database
@@ -39,4 +34,12 @@ rake db:migrate
 5. Run the seed file to populate database with cities.
 rake db:reset
 
-* ...
+Test the application |
+------------ |
+1. Start the rails server using the command:
+rails s
+2. Run the RSpec tests located under the /spec folder.
+3. Go to http://localhost:3000/ to launch the website.
+4. On the home page, click the Get Estimate button.
+5. In the Estimate page, enter your information and click the Submit button.
+6. You will see a summary page showing the estimated policy price and the rules that were applied to calculate the policy price.
